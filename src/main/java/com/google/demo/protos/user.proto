@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package user;
+
+option java_package = "com.google.demo.proto.user";
+option java_multiple_files = true;
+
+message UserPB {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string email = 4;
+
+    message Authorization {
+        string password = 1;
+    }
+    Authorization authorization = 5;
+}
+
+message GetUserRequest {
+    string id = 1;
+}
+
+message GetUserResponse {
+    UserPB user = 1;
+}
+
+service UserService {
+    rpc GetUser(GetUserRequest) returns (GetUserResponse) {};
+}

@@ -1,0 +1,51 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@io_grpc_grpc_java//:java_grpc_library.bzl", "java_grpc_library")
+
+java_binary(
+    name = "UserDashboard",
+    main_class = "com.google.demo.server.UserDashboard",
+    runtime_deps = [
+        ":java_library",
+    ],
+)
+
+java_binary(
+    name = "UserDashboardClient",
+    main_class = "com.google.demo.client.UserDashboardClient",
+    runtime_deps = [
+        ":java_library",
+    ],
+)
+
+java_library(
+    name = "java_library",
+    srcs = glob(
+        ["src/main/java/**/*.java"],
+    ),
+    runtime_deps = [
+        "@io_grpc_grpc_java//netty",
+    ],
+    deps = [
+        ":user_java_grpc",
+        ":user_java_proto",
+        "@io_grpc_grpc_java//api",
+        "@io_grpc_grpc_java//protobuf",
+        "@io_grpc_grpc_java//stub",
+    ],
+)
+
+java_proto_library(
+    name = "user_java_proto",
+    deps = [":user_proto"],
+)
+
+java_grpc_library(
+    name = "user_java_grpc",
+    srcs = [":user_proto"],
+    deps = [":user_java_proto"],
+)
+
+proto_library(
+    name = "user_proto",
+    srcs = ["src/main/java/com/google/demo/protos/user.proto"],
+)
